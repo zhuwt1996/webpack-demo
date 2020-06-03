@@ -1,45 +1,29 @@
 const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const {
+    CleanWebpackPlugin
+} = require('clean-webpack-plugin');
 
 module.exports = {
-    entry: './src/index.js',
-    output: {
-        filename: 'bundle.js',
-        path: path.resolve(__dirname, 'dist')
+    entry: {
+        app: './src/index.js',
+        print: './src/print.js'
     },
-    module: {
-        // webpack 根据正则表达式，来确定应该查找哪些文件，并将其提供给指定的 loader。
-        // 在这种情况下，以 .css 结尾的全部文件，都将被提供给 style-loader 和 css-loader
-        rules: [{
-                test: /\.css$/,
-                use: [
-                    'style-loader',
-                    'css-loader'
-                ]
-            },
-            {
-                test: /\.(png|svg|jpg|gif)$/,
-                use: [
-                    'file-loader'
-                ]
-            },
-            {
-                test: /\.(woff|woff2|eot|ttf|otf)$/,
-                use: [
-                    'file-loader'
-                ]
-            },
-            {
-                test: /\.(csv|tsv)$/,
-                use: [
-                    'csv-loader'
-                ]
-            },
-            {
-                test: /\.xml$/,
-                use: [
-                    'xml-loader'
-                ]
-            }
-        ]
-    }
+    devtool: 'inline-source-map',
+    // 修改配置文件，告诉开发服务器(dev server)，在哪里查找文件
+    devServer: {
+        contentBase: './dist'
+    },
+    plugins: [
+        // new CleanWebpackPlugin(),
+        new HtmlWebpackPlugin({
+            title: 'Output Management'
+        })
+    ],
+    output: {
+        filename: '[name].bundle.js',
+        path: path.resolve(__dirname, 'dist'),
+        publicPath: '/'
+    },
+
 };
